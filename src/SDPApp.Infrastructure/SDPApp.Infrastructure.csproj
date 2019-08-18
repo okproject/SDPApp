@@ -4,5 +4,9 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SDPApp.Core\SDPApp.Core.csproj" />
+    </ItemGroup>
+
 </Project>
  
