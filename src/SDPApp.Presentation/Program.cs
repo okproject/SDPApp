@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SDPApp.Application.UseCase;
 using SDPApp.Core.Abstraction;
+using SDPApp.Infrastructure;
 
 namespace SDPApp.Presentation
 {
@@ -15,14 +16,13 @@ namespace SDPApp.Presentation
 
         public static async Task ExtractData()
         {
-//            ISdpMessageRepository repository;
-//            ISdpExtractor _sdpExtractor;
-//            
-//            var query=new GetExtractedMessagesQuery();
-//            var handler=new GetExtractedMessagesQueryHandler(repository,_sdpExtractor);
-//            var extractedData =await  handler.Handle(query, new CancellationToken());
-//            extractedData.
+            var sdpMessagesFilePath = "";
+            ISdpMessageRepository repository = new SdpMessageRepository(sdpMessagesFilePath);
+            ISdpExtractor _sdpExtractor;
 
+            var query = new GetExtractedMessagesQuery();
+//            var handler = new GetExtractedMessagesQueryHandler(repository, _sdpExtractor);
+//            var extractedData = await handler.Handle(query, new CancellationToken());
         }
     }
 }
