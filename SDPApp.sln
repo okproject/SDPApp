@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDPApp.Core", "src\SDPApp.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDPApp.Application", "src\SDPApp.Application\SDPApp.Application.csproj", "{A14D31B0-7AC2-4661-A6DF-6D7A4EC0046E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDPApp.Infrastructure", "src\SDPApp.Infrastructure\SDPApp.Infrastructure.csproj", "{5944C374-EE2A-446F-8E7A-7F4A7DD36F69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{785C7F1B-0077-4246-8381-790271A40F01} = {16C4B635-9C19-4F43-870A-6758AD78C899}
 		{A14D31B0-7AC2-4661-A6DF-6D7A4EC0046E} = {16C4B635-9C19-4F43-870A-6758AD78C899}
+		{5944C374-EE2A-446F-8E7A-7F4A7DD36F69} = {16C4B635-9C19-4F43-870A-6758AD78C899}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{785C7F1B-0077-4246-8381-790271A40F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +27,9 @@ Global
 		{A14D31B0-7AC2-4661-A6DF-6D7A4EC0046E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A14D31B0-7AC2-4661-A6DF-6D7A4EC0046E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A14D31B0-7AC2-4661-A6DF-6D7A4EC0046E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5944C374-EE2A-446F-8E7A-7F4A7DD36F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5944C374-EE2A-446F-8E7A-7F4A7DD36F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5944C374-EE2A-446F-8E7A-7F4A7DD36F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5944C374-EE2A-446F-8E7A-7F4A7DD36F69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
