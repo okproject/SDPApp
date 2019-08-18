@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -20,12 +18,12 @@ namespace SDPApp.Infrastructure
         private readonly IPortParser _portParser;
         private readonly ICodecParser _codecParser;
 
-        private ExtractorSettings
+        private readonly ExtractorSettings
             _extractorSettings; //Parallelism  and output settings. If output specified, then result will be written related file.
 
-        private ConcurrentBag<ExtractedMessage> resultBag = new ConcurrentBag<ExtractedMessage>();
-        private ExecutionDataflowBlockOptions _executionDataflowBlockOptions;
-        private DataflowLinkOptions _dataflowLinkOptions; //To propagate completion of blocks to their waiters
+        private readonly ConcurrentBag<ExtractedMessage> resultBag = new ConcurrentBag<ExtractedMessage>();
+        private readonly ExecutionDataflowBlockOptions _executionDataflowBlockOptions;
+        private readonly DataflowLinkOptions _dataflowLinkOptions; //To propagate completion of blocks to their waiters
 
         public SdpExtractor(IIPParser ipParser, IPortParser portParser, ICodecParser codecParser,
             ExtractorSettings extractorSettings)
@@ -119,7 +117,7 @@ namespace SDPApp.Infrastructure
 
         private TransformBlock<string, string> GetIpTransformBlock()
         {
-            var ipTransformer = new TransformBlock<string, string>(x => { return _ipParser.ParseIp(x); },
+            var ipTransformer = new TransformBlock<string, string>(x => _ipParser.ParseIp(x),
                 new ExecutionDataflowBlockOptions()
                 {
                     MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
@@ -129,7 +127,7 @@ namespace SDPApp.Infrastructure
 
         private TransformBlock<string, string> GetPortTransformBlock()
         {
-            var portTransformBlock = new TransformBlock<string, string>(x => { return _portParser.ParsePort(x); },
+            var portTransformBlock = new TransformBlock<string, string>(x => _portParser.ParsePort(x),
                 new ExecutionDataflowBlockOptions()
                 {
                     MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
@@ -140,7 +138,7 @@ namespace SDPApp.Infrastructure
         private TransformBlock<string, string[]> GetCodecTransformBlock()
         {
             var codecTransformBlock = new TransformBlock<string, string[]>(
-                x => { return _codecParser.ParsePort(x).ToArray(); },
+                x => _codecParser.ParsePort(x).ToArray(),
                 new ExecutionDataflowBlockOptions()
                 {
                     MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
