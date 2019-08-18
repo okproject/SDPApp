@@ -111,20 +111,14 @@ namespace SDPApp.Infrastructure
         private TransformBlock<string, string> GetIpTransformBlock()
         {
             var ipTransformer = new TransformBlock<string, string>(x => _ipParser.ParseIp(x),
-                new ExecutionDataflowBlockOptions()
-                {
-                    MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
-                });
+                _executionDataflowBlockOptions);
             return ipTransformer;
         }
 
         private TransformBlock<string, string> GetPortTransformBlock()
         {
             var portTransformBlock = new TransformBlock<string, string>(x => _portParser.ParsePort(x),
-                new ExecutionDataflowBlockOptions()
-                {
-                    MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
-                });
+                _executionDataflowBlockOptions);
             return portTransformBlock;
         }
 
@@ -132,10 +126,7 @@ namespace SDPApp.Infrastructure
         {
             var codecTransformBlock = new TransformBlock<string, string[]>(
                 x => _codecParser.ParseCodecs(x).ToArray(),
-                new ExecutionDataflowBlockOptions()
-                {
-                    MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
-                });
+                _executionDataflowBlockOptions);
             return codecTransformBlock;
         }
 
@@ -150,10 +141,7 @@ namespace SDPApp.Infrastructure
                     };
                     resultBag.Add(extractedMessage);
                 },
-                new ExecutionDataflowBlockOptions()
-                {
-                    MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
-                });
+                _executionDataflowBlockOptions);
             return finalizerActionBlock;
         }
 
