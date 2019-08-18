@@ -5,5 +5,11 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SDPApp.Application\SDPApp.Application.csproj" />
+      <ProjectReference Include="..\SDPApp.Core\SDPApp.Core.csproj" />
+      <ProjectReference Include="..\SDPApp.Infrastructure\SDPApp.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
  
