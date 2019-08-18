@@ -10,10 +10,12 @@ namespace SDPApp.Infrastructure
     {
         public void WriteToFile(string fullFilePathToSaveData, IEnumerable<string> data)
         {
+            if (string.IsNullOrEmpty(fullFilePathToSaveData)) return;
             try
             {
-                if (string.IsNullOrEmpty(fullFilePathToSaveData) &&
-                    Directory.Exists(Path.GetFullPath(fullFilePathToSaveData)))
+                var path = Path.GetDirectoryName(fullFilePathToSaveData);
+
+                if (Directory.Exists(path))
                 {
                     File.WriteAllLines(fullFilePathToSaveData, data, Encoding.UTF8);
                 }
@@ -26,7 +28,6 @@ namespace SDPApp.Infrastructure
             {
                 Console.WriteLine($"File could not saved!: {e}");
             }
-            
         }
     }
 }
