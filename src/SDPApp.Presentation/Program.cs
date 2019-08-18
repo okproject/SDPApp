@@ -36,7 +36,7 @@ namespace SDPApp.Presentation
         }
 
 
-        private static async Task ExtractData(int maxDegreeOfParallelism, string inputFileMessageSeperator,
+        private static async Task ExtractData(int maxDegreeOfParallelism, string sdpMessagesFilePath,
             string extractedMessagesOutputPath, string seperator, RunTimeMode mode)
         {
             #region Configuration And Composition
@@ -46,7 +46,7 @@ namespace SDPApp.Presentation
                 MaxDegreeOfParallelism = maxDegreeOfParallelism,
                 OutputFileFullPath = extractedMessagesOutputPath
             };
-            var sdpMessagesFilePath = inputFileMessageSeperator;
+            
 
 
             var ipParser = new IpParser();
