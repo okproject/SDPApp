@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SDPApp.Core.Abstraction
 {
     public interface ISdpMessageRepository
     {
-        IEnumerable<string> GetMessages();
+        Task<IEnumerable<string>> GetMessages();
     }
 }

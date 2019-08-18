@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SDPApp.Core.Abstraction
 {
     public interface ISdpExtractor
     {
-        IEnumerable<ExtractedMessage> Extract(IEnumerable<string> rawSdpMessages);
+        Task<IEnumerable<ExtractedMessage>> Extract(IEnumerable<string> rawSdpMessages);
     }
 }
