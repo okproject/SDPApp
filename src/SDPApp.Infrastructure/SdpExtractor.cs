@@ -37,10 +37,7 @@ namespace SDPApp.Infrastructure
             if (extractorSettings == null)
                 _extractorSettings = new ExtractorSettings {MaxDegreeOfParallelism = Environment.ProcessorCount};
             _executionDataflowBlockOptions = GetExecutionDataFlowOptions();
-            _dataflowLinkOptions = new DataflowLinkOptions
-            {
-                PropagateCompletion = true
-            };
+            _dataflowLinkOptions = GetDataFlowLinkOptions();
         }
 
         public async Task<IEnumerable<ExtractedMessage>> Extract(IEnumerable<string> rawSdpMessages)

@@ -10,16 +10,18 @@ namespace SDPApp.Infrastructure
     public class SdpMessageRepository:ISdpMessageRepository
     {
         private string _filePath;
-        public SdpMessageRepository(string filePath)
+        private string _seperator;
+        public SdpMessageRepository(string filePath,string seperator)
         {
             _filePath = filePath;
+            _seperator = seperator;
         }
 
         
         public async Task<IEnumerable<string>> GetMessages()
         {
             var sdpFileContent = File.ReadAllText(_filePath); //TODO async read possible to make threadpool useful
-            var seperator = $"\r\n\r\n";
+            var seperator = _seperator; 
             var messages = sdpFileContent.Split(new[] {seperator}, StringSplitOptions.RemoveEmptyEntries);
             return await Task.FromResult(messages);
         }
