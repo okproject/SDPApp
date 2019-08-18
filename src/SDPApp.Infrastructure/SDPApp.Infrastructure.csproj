@@ -8,5 +8,9 @@
       <ProjectReference Include="..\SDPApp.Core\SDPApp.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.9.0" />
+    </ItemGroup>
+
 </Project>
  
