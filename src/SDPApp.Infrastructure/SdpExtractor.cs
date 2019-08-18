@@ -188,7 +188,7 @@ namespace SDPApp.Infrastructure
     public class ExtractorSettings
     {
         public int MaxDegreeOfParallelism { get; set; }
-        public string OutputFileFullPath { get; set; }
+        public string OutputFileFullPath { get; set; } //if not specified, there is no file will be written for output. Result will be kept in both case in memory.
         // ex: /User/temp/result.txt on macos  c:\temp\result.txt on windows//TODO: config
     }
 }
