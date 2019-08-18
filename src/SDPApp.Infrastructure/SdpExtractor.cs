@@ -14,6 +14,7 @@ namespace SDPApp.Infrastructure
 {
     public class SdpExtractor : ISdpExtractor
     {
+        private readonly IFileWriter _fileWriter;
         private readonly IIPParser _ipParser;
         private readonly IPortParser _portParser;
         private readonly ICodecParser _codecParser;
@@ -26,12 +27,13 @@ namespace SDPApp.Infrastructure
         private readonly DataflowLinkOptions _dataflowLinkOptions; //To propagate completion of blocks to their waiters
 
         public SdpExtractor(IIPParser ipParser, IPortParser portParser, ICodecParser codecParser,
-            ExtractorSettings extractorSettings)
+            ExtractorSettings extractorSettings, IFileWriter fileWriter)
         {
             _ipParser = ipParser;
             _portParser = portParser;
             _codecParser = codecParser;
             _extractorSettings = extractorSettings;
+            _fileWriter = fileWriter;
             if (extractorSettings == null)
                 _extractorSettings = new ExtractorSettings {MaxDegreeOfParallelism = Environment.ProcessorCount};
             _executionDataflowBlockOptions = GetExecutionDataFlowOptions();
@@ -88,12 +90,7 @@ namespace SDPApp.Infrastructure
             });
 
             var resultMessageList = resultBag.Select(x => x.ToString()).ToList();
-            if (string.IsNullOrEmpty(_extractorSettings.OutputFileFullPath) &&
-                Directory.Exists(_extractorSettings.OutputFileFullPath))
-            {
-                File.WriteAllLines(_extractorSettings.OutputFileFullPath, resultMessageList, Encoding.UTF8);
-            }
-
+            _fileWriter.WriteToFile(_extractorSettings.OutputFileFullPath, resultMessageList);
             return resultBag;
         }
 
@@ -113,7 +110,6 @@ namespace SDPApp.Infrastructure
             return dataFlowLinkOptions;
         }
 
-        
 
         private TransformBlock<string, string> GetIpTransformBlock()
         {
@@ -182,7 +178,14 @@ namespace SDPApp.Infrastructure
     public class ExtractorSettings
     {
         public int MaxDegreeOfParallelism { get; set; }
-        public string OutputFileFullPath { get; set; } //if not specified, there is no file will be written for output. Result will be kept in both case in memory.
+
+        public string
+            OutputFileFullPath
+        {
+            get;
+            set;
+        } //if not specified, there is no file will be written for output. Result will be kept in both case in memory.
+
         // ex: /User/temp/result.txt on macos  c:\temp\result.txt on windows//TODO: config
     }
 }
