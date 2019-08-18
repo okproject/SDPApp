@@ -4,6 +4,6 @@ namespace SDPApp.Core.Abstraction
 {
     public interface ICodecParser
     {
-        IEnumerable<string> ParsePort(string rawSdpMessage);
+        IEnumerable<string> ParseCodecs(string rawSdpMessage);
     }
 }

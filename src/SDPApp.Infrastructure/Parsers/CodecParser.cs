@@ -9,7 +9,7 @@ namespace SDPApp.Infrastructure.Parsers
     {
         private const string _codecPattern = @"(?<=a=rtpmap:[0-9] ).[^/]*";
 
-        public IEnumerable<string> ParsePort(string rawSdpMessage)
+        public IEnumerable<string> ParseCodecs(string rawSdpMessage)
         {
             var codecResult = Regex.Matches(rawSdpMessage, _codecPattern);
             return codecResult?.OfType<Match>()?.Select(cdc => cdc.Value)?.ToArray();

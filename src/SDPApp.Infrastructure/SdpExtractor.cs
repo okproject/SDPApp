@@ -131,7 +131,7 @@ namespace SDPApp.Infrastructure
         private TransformBlock<string, string[]> GetCodecTransformBlock()
         {
             var codecTransformBlock = new TransformBlock<string, string[]>(
-                x => _codecParser.ParsePort(x).ToArray(),
+                x => _codecParser.ParseCodecs(x).ToArray(),
                 new ExecutionDataflowBlockOptions()
                 {
                     MaxDegreeOfParallelism = _extractorSettings.MaxDegreeOfParallelism, SingleProducerConstrained = true
