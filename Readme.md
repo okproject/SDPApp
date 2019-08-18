@@ -1,4 +1,4 @@
-#SDPApp
+# SDPApp
 
 - Go to src/SDPApp.Presentation directory
 - follow commands
