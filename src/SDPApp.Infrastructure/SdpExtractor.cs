@@ -45,8 +45,6 @@ namespace SDPApp.Infrastructure
 
         public async Task<IEnumerable<ExtractedMessage>> Extract(IEnumerable<string> rawSdpMessages)
         {
-            //Configurations
-
             //Transformers
             var broadCast = GetBroadcastBlock();
             var joinBlock = GetJoinBlock();
