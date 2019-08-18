@@ -37,6 +37,8 @@ namespace SDPApp.Presentation
             var query = new GetExtractedMessagesQuery();
             var handler = new GetExtractedMessagesQueryHandler(repository, _sdpExtractor);
             var extractedData = await handler.Handle(query, new CancellationToken());
+
+            //YOU CAN OBSERVER RESULT IN THIS VARIABLE WITH BREAKPOINT: resultMessages
             var resultMessages =
                 extractedData
                     .ExtractedMessages; //results will be saved path specified in extractorSettings.OutputFileFullPath variable.
