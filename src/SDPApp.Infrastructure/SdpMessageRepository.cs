@@ -22,7 +22,7 @@ namespace SDPApp.Infrastructure
         {
             var sdpFileContent = File.ReadAllText(_filePath); //TODO async read possible to make threadpool useful
             var seperator = _seperator; 
-            var messages = sdpFileContent.Split(new[] {seperator}, StringSplitOptions.RemoveEmptyEntries);
+            var messages = sdpFileContent.Split(new[] {seperator}, StringSplitOptions.None);
             return await Task.FromResult(messages);
         }
     }

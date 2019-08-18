@@ -12,7 +12,7 @@ using SDPApp.Core.Abstraction;
 
 namespace SDPApp.Infrastructure
 {
-    public class SdpExtractor : ISdpExtractor
+    public class SdpExtractorTplDataFlow : ISdpExtractor
     {
         private readonly IFileWriter _fileWriter;
         private readonly IIPParser _ipParser;
@@ -26,7 +26,7 @@ namespace SDPApp.Infrastructure
         private readonly ExecutionDataflowBlockOptions _executionDataflowBlockOptions;
         private readonly DataflowLinkOptions _dataflowLinkOptions; //To propagate completion of blocks to their waiters
 
-        public SdpExtractor(IIPParser ipParser, IPortParser portParser, ICodecParser codecParser,
+        public SdpExtractorTplDataFlow(IIPParser ipParser, IPortParser portParser, ICodecParser codecParser,
             ExtractorSettings extractorSettings, IFileWriter fileWriter)
         {
             _ipParser = ipParser;
@@ -82,7 +82,7 @@ namespace SDPApp.Infrastructure
             {
                 sw.Stop();
                 Console.WriteLine($"Bag count {resultBag.Count}");
-                Console.WriteLine($"Total elapsed time in seconds: {sw.Elapsed.TotalSeconds}");
+                Console.WriteLine($"TPL DataFlow total elapsed time in seconds: {sw.Elapsed.TotalSeconds}");
                 Console.WriteLine($"Extracted message count: {resultBag.Count().ToString()}");
             });
 

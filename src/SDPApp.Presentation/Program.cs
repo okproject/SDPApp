@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SDPApp.Application.UseCase;
+using SDPApp.Core.Abstraction;
 using SDPApp.Infrastructure;
 using SDPApp.Infrastructure.Parsers;
 
@@ -11,24 +13,34 @@ namespace SDPApp.Presentation
     {
         static async Task Main(string[] args)
         {
-            //Configure app here
-            var outputPath =
-                $"{Environment.CurrentDirectory}/result-{Guid.NewGuid().ToString()}.txt"; //File will be saved here
-            var processorCount = Environment.ProcessorCount; //processor count here
-            var inputPath =
-                @"/Users/rasihcaglayan/Documents/temp/base/sdp_input_huge.txt"; //source sdp message file. this file will be using extracting data.
+            var config = new AppConfiguration(); //you can change config inside file
 
-            var inputFileMessageSeperator=$"\r\n\r\n";; //IMPORTANT: This line may need to change on different operating systems; new line character. We parse source file by double new line
-            
-            //After configuration, it is ready to run here
-            await ExtractData(processorCount, inputPath, outputPath,inputFileMessageSeperator);
+            //====== Try these 3 methods. All doing same thing with different way====
+
+            //==Strategy 1: TPL Dataflow
+            await ExtractData(config.ProcessorCount, config.SourceFilePathForSdpMessages, config.OutPutFileFullPath,
+                config.SourceFileSeperator, RunTimeMode.TplDataFlow);
+
+            //==Strategy 2: Parallel Linq===
+            config.OutPutFileFullPath = config.GetNewOutputFilePath();
+            await ExtractData(config.ProcessorCount, config.SourceFilePathForSdpMessages, config.OutPutFileFullPath,
+                config.SourceFileSeperator, RunTimeMode.Parallel);
+
+            //===Strategy 3: Sequential
+            config.OutPutFileFullPath = config.GetNewOutputFilePath();
+            await ExtractData(config.ProcessorCount, config.SourceFilePathForSdpMessages, config.OutPutFileFullPath,
+                config.SourceFileSeperator, RunTimeMode.Sequential);
+
             Console.WriteLine("Finished! Presss a key to exit.");
             Console.ReadKey();
         }
 
-        public static async Task ExtractData(int maxDegreeOfParallelism, string inputFileMessageSeperator,
-            string extractedMessagesOutputPath,string seperator)
+
+        private static async Task ExtractData(int maxDegreeOfParallelism, string inputFileMessageSeperator,
+            string extractedMessagesOutputPath, string seperator, RunTimeMode mode)
         {
+            #region Configuration And Composition
+
             var extractorSettings = new ExtractorSettings
             {
                 MaxDegreeOfParallelism = maxDegreeOfParallelism,
@@ -40,14 +52,36 @@ namespace SDPApp.Presentation
             var ipParser = new IpParser();
             var portParser = new PortParser();
             var codecParser = new CodecParser();
-            var repository = new SdpMessageRepository(sdpMessagesFilePath,seperator);
+            var repository = new SdpMessageRepository(sdpMessagesFilePath, seperator);
             var fileWriter = new ResultFileWriter();
-            var _sdpExtractor = new SdpExtractor(ipParser, portParser, codecParser, extractorSettings, fileWriter);
+
+            ISdpExtractor extractor;
+            //
+            switch (mode)
+            {
+                case RunTimeMode.Parallel:
+                    extractor =
+                        new SdpExtractorParallelLinq(fileWriter, ipParser, portParser, codecParser, extractorSettings);
+                    break;
+                case RunTimeMode.Sequential:
+                    extractor = new SdpExtractorSequential(fileWriter, ipParser, portParser, codecParser,
+                        extractorSettings);
+                    break;
+                case RunTimeMode.TplDataFlow:
+                    extractor = new SdpExtractorTplDataFlow(ipParser, portParser, codecParser, extractorSettings,
+                        fileWriter);
+                    break;
+                default:
+                    throw new Exception("Mode not found");
+            }
+
+            #endregion
+
+            
             var query = new GetExtractedMessagesQuery();
-            var handler = new GetExtractedMessagesQueryHandler(repository, _sdpExtractor);
+            var handler = new GetExtractedMessagesQueryHandler(repository, extractor);
             var extractedData = await handler.Handle(query, new CancellationToken());
 
-            //YOU CAN OBSERVER RESULT IN THIS VARIABLE WITH BREAKPOINT: resultMessages
             var resultMessages =
                 extractedData
                     .ExtractedMessages; //results will be saved path specified in extractorSettings.OutputFileFullPath variable; you can find it from starting lines of this method.
