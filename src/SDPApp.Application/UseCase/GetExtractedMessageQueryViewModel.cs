@@ -5,6 +5,6 @@ namespace SDPApp.Application.UseCase
 {
     public class GetExtractedMessageQueryViewModel
     {
-        public IEnumerable<ExtractedMessage> ExtractedMessages { get; set; }
+        public List<ExtractedMessage> ExtractedMessages { get; set; }
     }
 }

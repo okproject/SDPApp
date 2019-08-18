@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SDPApp.Application.Abstraction;
@@ -23,7 +24,7 @@ namespace SDPApp.Application.UseCase
             
             var result=new GetExtractedMessageQueryViewModel()
             {
-                ExtractedMessages = extractedData
+                ExtractedMessages = extractedData.ToList()
             };
             return result;
         }
