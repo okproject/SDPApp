@@ -1,28 +1,45 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SDPApp.Application.UseCase;
 using SDPApp.Core.Abstraction;
 using SDPApp.Infrastructure;
+using SDPApp.Infrastructure.Parsers;
 
 namespace SDPApp.Presentation
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            await ExtractData();
+            Console.WriteLine("Finished! Presss a key to exit.");
+            Console.ReadKey();
         }
 
         public static async Task ExtractData()
         {
-            var sdpMessagesFilePath = "";
-            ISdpMessageRepository repository = new SdpMessageRepository(sdpMessagesFilePath);
-            ISdpExtractor _sdpExtractor;
+            var extractorSettings = new ExtractorSettings()
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount,
+                OutputFileFullPath = $"{Environment.CurrentDirectory}/result-{Guid.NewGuid().ToString()}.txt"
+            };
+            var sdpMessagesFilePath =
+                @"/Users/rasihcaglayan/Documents/temp/base/sdp_input_huge.txt"; //source sdp message file. this file will be using extracting data.
 
+            var ipParser = new IpParser();
+            var portParser = new PortParser();
+            var codecParser = new CodecParser();
+            var repository = new SdpMessageRepository(sdpMessagesFilePath);
+
+            var _sdpExtractor = new SdpExtractor(ipParser, portParser, codecParser, extractorSettings);
             var query = new GetExtractedMessagesQuery();
-//            var handler = new GetExtractedMessagesQueryHandler(repository, _sdpExtractor);
-//            var extractedData = await handler.Handle(query, new CancellationToken());
+            var handler = new GetExtractedMessagesQueryHandler(repository, _sdpExtractor);
+            var extractedData = await handler.Handle(query, new CancellationToken());
+            var resultMessages =
+                extractedData
+                    .ExtractedMessages; //results will be saved path specified in extractorSettings.OutputFileFullPath variable.
         }
     }
 }
