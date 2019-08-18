@@ -9,7 +9,6 @@ namespace SDPApp.Infrastructure.Parsers
         public string ParsePort(string rawSdpMessage)
         {
             if (string.IsNullOrEmpty(rawSdpMessage)) return "";
-            var ptrn = @"(?<=m=audio )[0-9]*";
             var port = Regex.Match(rawSdpMessage, _portPattern);
             return port?.Value ?? "";
         }
