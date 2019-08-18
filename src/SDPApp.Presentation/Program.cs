@@ -32,8 +32,8 @@ namespace SDPApp.Presentation
             var portParser = new PortParser();
             var codecParser = new CodecParser();
             var repository = new SdpMessageRepository(sdpMessagesFilePath);
-
-            var _sdpExtractor = new SdpExtractor(ipParser, portParser, codecParser, extractorSettings);
+            var fileWriter = new ResultFileWriter();
+            var _sdpExtractor = new SdpExtractor(ipParser, portParser, codecParser, extractorSettings, fileWriter);
             var query = new GetExtractedMessagesQuery();
             var handler = new GetExtractedMessagesQueryHandler(repository, _sdpExtractor);
             var extractedData = await handler.Handle(query, new CancellationToken());
