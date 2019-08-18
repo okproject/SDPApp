@@ -18,10 +18,10 @@ namespace SDPApp.Infrastructure
         
         public async Task<IEnumerable<string>> GetMessages()
         {
-            var sdpFileContent = File.ReadAllText(_filePath);
+            var sdpFileContent = File.ReadAllText(_filePath); //TODO async read possible to make threadpool useful
             var seperator = $"\r\n\r\n";
             var messages = sdpFileContent.Split(new[] {seperator}, StringSplitOptions.RemoveEmptyEntries);
-            return messages;
+            return await Task.FromResult(messages);
         }
     }
 }
