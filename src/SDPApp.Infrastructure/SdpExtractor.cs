@@ -113,7 +113,7 @@ namespace SDPApp.Infrastructure
             return dataFlowLinkOptions;
         }
 
-        #region Transformers
+        
 
         private TransformBlock<string, string> GetIpTransformBlock()
         {
@@ -175,8 +175,6 @@ namespace SDPApp.Infrastructure
             var broadCast = new BroadcastBlock<string>(cloningFunc => cloningFunc, _executionDataflowBlockOptions);
             return broadCast;
         }
-
-        #endregion
     }
 
 
